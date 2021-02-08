@@ -3,7 +3,7 @@ import React,{ useEffect, useState } from 'react';
 import './App.css';
 import fire from './fire';
 import Login from './login';
-import User from './user';
+import Main from './main';
 
 
 const App=()=> {
@@ -75,7 +75,7 @@ const authListener=()=>
     else
     setUser("");
 
-  })
+  });
 };
 
 useEffect(()=>{
@@ -84,10 +84,9 @@ authListener();
 
   return (
     <div className="App">
-      {user ? ( 
-        <User handleSignOut={handleSignOut}/>
-       )
-      :(
+      { user ? ( 
+        <Main handleSignOut={handleSignOut}/>
+       ) : (
         <Login
         email={email}
         setEmail={setEmail} 

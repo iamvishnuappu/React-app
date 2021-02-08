@@ -1,6 +1,6 @@
 import React from 'react';
 
-const User= (handleSignOut)=>{
+const Main= (handleSignOut)=>{
     return(
         <section className="hero">
         <nav>
@@ -11,4 +11,4 @@ const User= (handleSignOut)=>{
 
     )
 }
-export default User;
+export default Main;
