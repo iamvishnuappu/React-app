@@ -1,4 +1,7 @@
- import firebase from 'firebase';
+
+import firebase from 'firebase';
+  // If using Firebase storage
+
   var firebaseConfig = {
     apiKey: "AIzaSyATAZ-KM-eL3pqwG7C0uZYK4u6ZohP8Wok",
     authDomain: "app1-a1a8f.firebaseapp.com",
@@ -10,6 +13,7 @@
   };
   // Initialize Firebase
   const fire= firebase.initializeApp(firebaseConfig);
-  export default fire;
-  firebase.analytics();
+  const storage = firebase.storage();
+  export { storage, fire as default };
+  
   

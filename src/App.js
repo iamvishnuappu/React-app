@@ -1,18 +1,21 @@
 
 import React,{ useEffect, useState } from 'react';
 import './App.css';
-import fire from './fire';
+
 import Login from './login';
 import Main from './main';
-
+import fire, { storage } from "./fire";
 
 const App=()=> {
-  const [user,setUser]= useState("");
-  const [email,setEmail]= useState("");
-  const [password,setPassword]=useState("");
-  const [emailError,setEmailError]=useState("");
-  const [passwordError,setPasswordError]=useState("");
-  const [hasAccount,setHasAccount]=useState("");
+  const [user,setUser]= useState('');
+  const [email,setEmail]= useState('');
+  const [password,setPassword]=useState('');
+  const [emailError,setEmailError]=useState('');
+  const [passwordError,setPasswordError]=useState('');
+  const [hasAccount,setHasAccount]=useState(false);
+  const [image, setImage] = useState(null);
+  const [url, setUrl] = useState("");
+  const [progress, setProgress] = useState(0);
   
   const clearInputs=()=>{
     setEmail('');
@@ -58,34 +61,65 @@ const App=()=> {
                    setPasswordError(err.message);
                    break;
    }
+
  });
+ const uploadTask = storage.ref(`images/${email}`).put(image);
+ uploadTask.on(
+   "state_changed",
+   snapshot => {
+     const progress = Math.round(
+       (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+     );
+     setProgress(progress);
+   },
+   error => {
+     console.log(error);
+   },
+ 
+ );
 };
-const handleSignOut=()=>{
-  fire.auth.signOut();
-};
+
+
 
 const authListener=()=>
 {
   fire.auth().onAuthStateChanged(user=> {
-    if(user){
+    
+    if(user)
+    {
       clearInputs();
-      setUser(user);
-      
+
+      setUser(user);    
     }
     else
+    {
     setUser("");
-
+    }
   });
+ 
+
 };
 
 useEffect(()=>{
 authListener();
 } , [] );
 
+
+const handleChange = e => {
+  if (e.target.files[0]) {
+    setImage(e.target.files[0]);
+  }
+};
+
+const handleUpload = () => {
+ 
+};
+
   return (
     <div className="App">
       { user ? ( 
-        <Main handleSignOut={handleSignOut}/>
+        <Main ></Main>
+          
        ) : (
         <Login
         email={email}
@@ -98,10 +132,14 @@ authListener();
         setHasAccount={setHasAccount}
         emailError={emailError}        
         passwordError={passwordError}
+        url={url}
+        image={image}
+        progress={progress}
+        handleUpload={handleUpload}
+        handleChange={handleChange}
+
        />
-        )}
-     
-      
+        )}    
     </div>
   );
   };
